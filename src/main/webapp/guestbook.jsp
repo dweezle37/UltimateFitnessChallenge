@@ -18,24 +18,25 @@
 </head>
 
 <body>
-
 <%
-    String guestbookName = request.getParameter("guestbookName");
-    if (guestbookName == null) {
-        guestbookName = "default";
+    String fbKey = request.getParameter("key");
+    if (fbKey == null) {
+        fbKey = "123ABC";
     }
-    pageContext.setAttribute("guestbookName", guestbookName);
+    pageContext.setAttribute("fbKey", fbKey);
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     if (user != null) {
         pageContext.setAttribute("user", user);
 %>
-<p>HELLO, ${fn:escapeXml(user.nickname)}! (
+
+<center><h1>Ultimate Fitness challenge</h1></center>
+<p align="right">USER: ${fn:escapeXml(user.nickname)}! FBKEY: <%= fbKey %> (
     <a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">sign out</a>.)</p>
 <%
 } else {
 %>
-<p>Hello!
+<p align="right">Hello!
     <a href="<%= userService.createLoginURL(request.getRequestURI()) %>">Sign in</a>
     to include your name with greetings you post.</p>
 <%
@@ -43,15 +44,47 @@
 %>
 
 <%
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Key guestbookKey = KeyFactory.createKey("Guestbook", guestbookName);
+    //DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    //Key fitbitKey = KeyFactory.createKey("FitbitKey", fbkey);
     // Run an ancestor query to ensure we see the most up-to-date
     // view of the Greetings belonging to the selected Guestbook.
-    Query query = new Query("Greeting", guestbookKey).addSort("date", Query.SortDirection.DESCENDING);
-    List<Entity> greetings = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
-    if (greetings.isEmpty()) {
+    //Query query = new Query("stats", fitbitKey).addSort("date", Query.SortDirection.DESCENDING);
+    //List<Entity> stats = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+    //if (stats.isEmpty()) {
 %>
-<p>Guestbook '${fn:escapeXml(guestbookName)}' has no messages.</p>
+<table border=1 align="left">
+<tr>
+  <th>&nbsp;</th>
+  <th>${fn:escapeXml(user.nickname)}</th>
+</tr>
+<tr>
+  <th>Starting TrendWeight</th>
+  <td>123</td>
+</tr>
+<tr>
+  <th>Ending TrendWeight</th>
+  <td>124</td>
+</tr>
+<tr>
+  <th>Weekly Weight % Loss</th>
+  <td>1</td>
+</tr>
+<tr>
+  <th>Weekly Minutes Exercising</th>
+  <td>60</td>
+</tr>
+<tr>
+  <th>Total Floors</th>
+  <td>15</td>
+</tr>
+<tr>
+  <th>Total Steps</th>
+  <td>23021</td>
+</tr>
+</table>
+
+
+<%--
 <%
 } else {
 %>
@@ -77,16 +110,13 @@
         }
     }
 %>
+--%>
 
-<form action="/sign" method="post">
-    <div><textarea name="content" rows="3" cols="60"></textarea></div>
-    <div><input type="submit" value="Post Greeting"/></div>
-    <input type="hidden" name="guestbookName" value="${fn:escapeXml(guestbookName)}"/>
-</form>
+<br />
 
 <form action="/guestbook.jsp" method="get">
-    <div><input type="text" name="guestbookName" value="${fn:escapeXml(guestbookName)}"/></div>
-    <div><input type="submit" value="Switch Guestbook"/></div>
+    <div><input type="text" name="key" value="${fn:escapeXml(fbkey)}"/></div>
+    <div><input type="submit" value="Lookup FitBit Key"/></div>
 </form>
 
 </body>

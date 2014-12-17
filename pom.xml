@@ -90,8 +90,8 @@
                 <configuration>
                    <fullScanSeconds>1</fullScanSeconds>
                    <server>preview.appengine.google.com</server>
-		   <!-- <port>8181</port> -->
-		   <address>172.17.166.58</address>
+        		   <!-- <port>8181</port> -->
+        		   <address>172.17.166.58</address>
                 </configuration>
             </plugin>
             <plugin>
